@@ -1,3 +1,4 @@
+```plantuml
 @startuml
 title Improved E-Commerce Application - ERD (Without Multi-tenancy)
 
@@ -226,3 +227,4 @@ CustomerSegments }o--o{ Users : "groups"
 ' Self-reference for category hierarchy
 Categories }|--o| Categories : "parent"
 @enduml
+```
