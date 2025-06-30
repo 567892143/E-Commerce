@@ -14,10 +14,11 @@ namespace ServiceLayer.dbContext
 
         public DbSet<Models.User> Users { get; set; }
         public DbSet<Contact> Contacts { get; set; }
+        public DbSet<Role> role { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-           
+
         }
 
         // Helper to convert PascalCase → snake_case

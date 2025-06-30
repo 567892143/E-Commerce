@@ -6,7 +6,7 @@ title Improved E-Commerce Application - ERD (Without Multi-tenancy)
 entity Users {
   + id : UUID [PK]
   + name : varchar
-  + role : enum (Customer, Admin, Manager)
+  + roleid : long[FK]
   + contactId : UUID [FK]
   + password : varchar "Hashed"
   + lastLogin : datetime
@@ -14,6 +14,11 @@ entity Users {
   + createdAt : datetime
   + updatedAt : datetime
   + deletedAt : datetime "For soft delete"
+}
+
+entity Role{
+  + id : bigint[PK]
+  + name : varchar
 }
 
 entity Contacts {
