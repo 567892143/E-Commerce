@@ -10,6 +10,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using ServiceLayer.User.Dto;
 using Microsoft.Extensions.Logging;
+using Shared.Services.Exceptions;
 
 namespace ServiceLayer.Services;
 
@@ -32,11 +33,29 @@ public class UserService : IUserService
     {
         _logger.LogInformation("Fetching access token for user with email:{email}",userLoginDto.email);
         IQueryable<Models.User> user = _userRepository.GetAllUsers();
-        //  User validUser=user.Where(u=> u.ContactId==Contact.Id)
+        IQueryable<Models.Contact> contact = _userRepository.GetAllContacts();
+
+        var userContact=contact.Where(c => c.Email== userLoginDto.email).FirstOrDefault();
+         if (userContact == null)
+            {
+                _logger.LogError("No contact found with email: {Email}", userLoginDto.email);
+                throw new NotFoundCustomException("No contact found with email");
+            }
+
+            var validUser = _userRepository.GetAllUsers()
+                .FirstOrDefault(u => u.ContactId == userContact.Id);
+
+            if (validUser == null)
+            {
+                _logger.LogError("No user found linked to contact with email: {Email}", userLoginDto.email);
+                throw new NotFoundCustomException("No user found linked to contact with email");
+               
+            }
 
 
-        string accessToken = GenerateJwtToken(user.FirstOrDefault());
-        return new JwtTokenResponseDto{AccessToken=accessToken,RefreshToken=null};
+        string accessToken = GenerateJwtToken(validUser);
+         _logger.LogInformation("Fetched access token for user with email:{Email}",userLoginDto.email);
+        return new JwtTokenResponseDto { AccessToken = accessToken, RefreshToken = null };
     }
     
     private string GenerateJwtToken(Models.User? user)

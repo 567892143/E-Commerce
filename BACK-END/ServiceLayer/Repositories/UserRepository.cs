@@ -12,6 +12,11 @@ public class UserRepository : RepositoryBase<User>, IUserRepository
 
     public IQueryable<User> GetAllUsers()
     {
-         return FindByCondition(user => user.IsActive);
+        return FindByCondition(user => user.IsActive);
+    }
+    
+    public IQueryable<Contact> GetAllContacts()
+    {
+         return _context.Contacts;
     }
 }
