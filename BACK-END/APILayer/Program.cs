@@ -1,4 +1,5 @@
 using APILayer.Extension;
+using ServiceLayer.DbSeeder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,10 @@ if (app.Environment.IsDevelopment())
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "API V1");
         options.RoutePrefix = ""; // Serve Swagger at root
     });
+}
+if (true || app.Environment.IsProduction())
+{
+    SeedData.SeedDatabase(app.Services);
 }
 
 app.UseHttpsRedirection();

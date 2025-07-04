@@ -16,26 +16,31 @@ namespace ServiceLayer.dbContext
         public DbSet<Contact> Contacts { get; set; }
         public DbSet<Role> role { get; set; }
 
+
+         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductVariant> ProductVariants { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
+        public DbSet<Inventory> Inventories { get; set; }
+        public DbSet<Warehouse> Warehouses { get; set; }
+        public DbSet<Category> Categories { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<Wishlist> Wishlists { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<Shipping> Shippings { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+        public DbSet<Discount> Discounts { get; set; }
+        public DbSet<DiscountRule> DiscountRules { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+           base.OnModelCreating(modelBuilder);
 
+            // Optional: Add unique constraints, enum conversions, etc. here
         }
 
-        // Helper to convert PascalCase → snake_case
-        private static string ToSnakeCase(string input)
-        {
-            if (string.IsNullOrEmpty(input))
-                return input;
-
-            // Handle acronyms and consecutive uppercase letters
-            var result = Regex.Replace(
-                input,
-                @"([a-z0-9])([A-Z])|([A-Z])([A-Z][a-z])",
-                m => m.Groups[1].Success ? $"{m.Groups[1].Value}_{m.Groups[2].Value}" : $"{m.Groups[3].Value}_{m.Groups[4].Value}",
-                RegexOptions.Compiled
-            ).ToLower();
-
-            return result;
-        }
+        
+        
     }
 }
