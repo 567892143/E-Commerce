@@ -15,6 +15,7 @@ namespace APILayer.Extension
         {
             // Register all services
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IProductService,ProductService>();
             // Add more services here
         }
 
@@ -28,7 +29,6 @@ namespace APILayer.Extension
         public static void ConfigurePostgresDbContext(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
-
             services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(connectionString));
         }
