@@ -1,4 +1,4 @@
-
+```plantuml
 @startuml
 ' Define entities with attributes
 entity Users {
@@ -12,6 +12,10 @@ entity Users {
   + createdAt : datetime
   + updatedAt : datetime
   + deletedAt : datetime "For soft delete"
+}
+entity Role{
+  +id:bigint[pk]
+  +name:varchar
 }
 
 entity Contacts {
@@ -197,6 +201,7 @@ Users ||--o{ Orders : "places"
 Users ||--o{ Cart : "has"
 Users ||--o{ Wishlist : "has"
 Users ||--o{ Reviews : "writes"
+Users ||--o{ Role : "has"
 
 Products ||--|| Categories : "belongs to"
 Products ||--o{ ProductVariants : "has"
@@ -219,3 +224,4 @@ Discounts ||--o{ DiscountRules : "defined by"
 ' Self-reference for category hierarchy
 Categories }|--o| Categories : "parent"
 @enduml
+```

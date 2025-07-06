@@ -17,18 +17,18 @@ namespace ServiceLayer.dbContext
         public DbSet<Role> role { get; set; }
 
 
-         public DbSet<Product> Products { get; set; }
+         public DbSet<Models.Product> Products { get; set; }
         public DbSet<ProductVariant> ProductVariants { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
-        public DbSet<Inventory> Inventories { get; set; }
+        public DbSet<Models.Inventory> Inventories { get; set; }
         public DbSet<Warehouse> Warehouses { get; set; }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Order> Orders { get; set; }
+        public DbSet<Models.Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
-        public DbSet<Cart> Carts { get; set; }
+        public DbSet<Models.Cart> Carts { get; set; }
         public DbSet<Wishlist> Wishlists { get; set; }
-        public DbSet<Payment> Payments { get; set; }
-        public DbSet<Shipping> Shippings { get; set; }
+        public DbSet<Models.Payment> Payments { get; set; }
+        public DbSet<Models.Shipping> Shippings { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Discount> Discounts { get; set; }
         public DbSet<DiscountRule> DiscountRules { get; set; }
