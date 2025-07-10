@@ -44,7 +44,8 @@ public class UserService : IUserService
             throw new NotFoundCustomException("No contact found with email");
         }
 
-        var validUser = _userRepository.GetAllUsers()
+
+        var validUser = user
             .FirstOrDefault(u => u.ContactId == userContact.Id);
 
         if (validUser == null)
@@ -54,6 +55,12 @@ public class UserService : IUserService
 
         }
 
+       bool verification= VerifyPassword(userLoginDto.Password,validUser.Password);
+        if (!verification)
+        {
+            _logger.LogError("Invalid password provided for email : {Email}", userLoginDto.email);
+            throw new  Exception("Bad request invalid password");
+        }
 
         string accessToken = GenerateJwtToken(validUser);
         _logger.LogInformation("Fetched access token for user with email:{Email}", userLoginDto.email);
@@ -61,8 +68,14 @@ public class UserService : IUserService
     }
     public void RegisterUser(UserRegisterDto dto)
     {
-        // if (_userRepository.EmailExists(dto.Email))
-        //     throw new AlreadyExistsException("Email already in use");
+         IQueryable<Models.Contact> contactList = _userRepository.GetAllContacts();
+        var userContact = contactList.Where(c => c.Email == dto.Email).FirstOrDefault();
+
+         if (userContact != null)
+        {
+            _logger.LogError("Email already exists: {Email}", dto.Email);
+            throw new Exception("No contact found with email");
+        }
 
         var contact = new Contact
         {
@@ -86,15 +99,14 @@ public class UserService : IUserService
             Id = Guid.NewGuid(),
             Name = dto.Name,
             Password = HashPassword(dto.Password),
-          //  RoleId = role.Id,
+            Role = 1,
             ContactId = contact.Id,
             IsActive = true,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
 
-        // _contactRepo.Create(contact);
-        // _userRepo.Create(user);
+        _userRepository.AddNewUser(user, contact);
     }
 
 
@@ -106,26 +118,25 @@ public class UserService : IUserService
 
     public bool UpdateUser(Guid id, UpdateUserDto dto)
     {
-        // //var user = _userRepo.GetById(id);
-        // if (user == null) return false;
+        var user = _userRepository.GetUserById(id);
+        if (user == null) return false;
 
-        // //var contact = _contactRepo.GetById(user.ContactId);
-        // if (contact == null) return false;
+        var contact = _userRepository.GetContactById(user.ContactId);
+        if (contact == null) return false;
 
-        // user.Name = dto.Name;
-        // user.UpdatedAt = DateTime.UtcNow;
+        user.Name = dto.Name;
+        user.UpdatedAt = DateTime.UtcNow;
 
-        // contact.Mobile = dto.Mobile;
-        // contact.AddressLine1 = dto.AddressLine1;
-        // contact.AddressLine2 = dto.AddressLine2;
-        // contact.City = dto.City;
-        // contact.State = dto.State;
-        // contact.Country = dto.Country;
-        // contact.PostalCode = dto.PostalCode;
-        // contact.UpdatedAt = DateTime.UtcNow;
+        contact.Mobile = dto.Mobile;
+        contact.AddressLine1 = dto.AddressLine1;
+        contact.AddressLine2 = dto.AddressLine2;
+        contact.City = dto.City;
+        contact.State = dto.State;
+        contact.Country = dto.Country;
+        contact.PostalCode = dto.PostalCode;
+        contact.UpdatedAt = DateTime.UtcNow;
 
-        // _userRepo.Update(user);
-        // _contactRepo.Update(contact);
+        _userRepository.UpdateUserContact(user, contact);
 
         return true;
     }
@@ -149,12 +160,12 @@ public class UserService : IUserService
 
     public bool DeactivateUser(Guid id)
     {
-        // var user = _userRepo.GetById(id);
-        // if (user == null) return false;
+        var user = _userRepository.GetUserById(id);
+        if (user == null) return false;
 
-        // user.IsActive = false;
-        // user.UpdatedAt = DateTime.UtcNow;
-        // _userRepo.Update(user);
+        user.IsActive = false;
+        user.UpdatedAt = DateTime.UtcNow;
+        _userRepository.Update(user);
         return true;
     }
 
@@ -182,7 +193,7 @@ public class UserService : IUserService
 
         new Claim("userId", user.Id.ToString()),
         new Claim("roleId", user.Role.ToString())
-    };
+        };
 
         var key = new SymmetricSecurityKey(
             Encoding.UTF8.GetBytes(_config["JwtConfig:SecretKey"] ?? ""));

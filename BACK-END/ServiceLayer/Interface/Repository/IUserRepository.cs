@@ -9,4 +9,8 @@ public interface IUserRepository : IRepositoryBase<ServiceLayer.Models.User>
 {
     IQueryable<Models.User> GetAllUsers();
     IQueryable<Models.Contact> GetAllContacts();
+    void AddNewUser(Models.User user, Contact contact);
+    Models.User? GetUserById(Guid userId);
+    Contact? GetContactById(Guid contactId);
+    void UpdateUserContact(Models.User user, Contact contact);
 }
