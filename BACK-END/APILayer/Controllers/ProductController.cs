@@ -65,6 +65,7 @@ namespace YourApp.Api.Controllers
         // Admin endpoints
 
         [HttpPost]
+        [CustomAuthorize("1")]
         public ActionResult CreateProduct([FromBody] CreateProductDto productDto)
         {
             var productId = _productService.CreateProduct(productDto);
@@ -72,6 +73,7 @@ namespace YourApp.Api.Controllers
         }
 
         [HttpPut("{id}")]
+        [CustomAuthorize("1")]
         public IActionResult UpdateProduct(Guid id, [FromBody] UpdateProductDto updateDto)
         {
             var updated = _productService.UpdateProduct(id, updateDto);
@@ -80,6 +82,7 @@ namespace YourApp.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [CustomAuthorize("1")]
         public async Task<IActionResult> DeleteProduct(Guid id)
         {
             var deleted = await _productService.DeleteProduct(id);
@@ -106,6 +109,7 @@ namespace YourApp.Api.Controllers
 
         // DELETE /api/reviews/{id}
         [HttpDelete("reviews/{reviewId}")]
+        [CustomAuthorize("1")]
         public IActionResult DeleteReview(Guid reviewId)
         {
             var userId = GetUserId();
@@ -115,6 +119,7 @@ namespace YourApp.Api.Controllers
 
         // GET /api/discounts/validate?code=XXXX
         [HttpGet("discounts/validate")]
+        [CustomAuthorize("1")]
         public IActionResult ValidateDiscount([FromQuery] string code)
         {
             var discount = _productService.ValidateDiscount(code);
@@ -126,6 +131,7 @@ namespace YourApp.Api.Controllers
 
         // POST /api/discounts
         [HttpPost("discounts")]
+        [CustomAuthorize("1")]
         public IActionResult CreateDiscount([FromBody] CreateDiscountDto dto)
         {
             _productService.CreateDiscount(dto);

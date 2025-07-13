@@ -5,6 +5,7 @@ using ServiceLayer.Inventory.Dto;
 namespace YourApp.Api.Controllers
 {
     [ApiController]
+    [CustomAuthorize("1")]
     [Route("api/v1/inventory")]
     public class InventoryController : ControllerBase
     {

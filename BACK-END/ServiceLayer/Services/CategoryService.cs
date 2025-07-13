@@ -48,17 +48,19 @@ namespace ServiceLayer.Services
             };
         }
 
-        public Guid CreateCategory(CreateCategoryDto dto)
+        public async Task<Guid> CreateCategory(CreateCategoryDto dto)
         {
             var category = new Category
             {
                 Id = Guid.NewGuid(),
                 Name = dto.Name,
                 ParentId = dto.ParentId,
+                Slug="dummy",
                 CreatedAt = DateTime.UtcNow
             };
 
             _categoryRepository.Create(category);
+            await _categoryRepository.SaveAsync();
             return category.Id;
         }
 

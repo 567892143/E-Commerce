@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ServiceLayer.Interface;
 using ServiceLayer.Product.Dto;
@@ -36,13 +37,15 @@ public class CategoryController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create([FromBody] CreateCategoryDto dto)
+    [CustomAuthorize("1")]
+    public async Task<IActionResult> Create([FromBody] CreateCategoryDto dto)
     {
-        var categoryId = _categoryService.CreateCategory(dto);
+        var categoryId = await _categoryService.CreateCategory(dto);
         return CreatedAtAction(nameof(GetById), new { id = categoryId }, null);
     }
 
     [HttpPut("{id}")]
+    [CustomAuthorize("1")]
     public IActionResult Update(Guid id, [FromBody] UpdateCategoryDto dto)
     {
         var success = _categoryService.UpdateCategory(id, dto);
@@ -51,6 +54,7 @@ public class CategoryController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [CustomAuthorize("1")]
     public IActionResult Delete(Guid id)
     {
         var deleted = _categoryService.DeleteCategory(id);

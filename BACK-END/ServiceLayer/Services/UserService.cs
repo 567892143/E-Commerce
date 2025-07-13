@@ -99,7 +99,7 @@ public class UserService : IUserService
             Id = Guid.NewGuid(),
             Name = dto.Name,
             Password = HashPassword(dto.Password),
-            Role = 1,
+            Role = 2,
             ContactId = contact.Id,
             IsActive = true,
             CreatedAt = DateTime.UtcNow,

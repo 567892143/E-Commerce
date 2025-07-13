@@ -56,6 +56,7 @@ namespace YourApp.Api.Controllers
 
         // ❌ Deactivate user (Admin)
         [HttpDelete("{id}")]
+        [CustomAuthorize("1")]
         public IActionResult DeactivateUser(Guid id)
         {
             var result = _userService.DeactivateUser(id);

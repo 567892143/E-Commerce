@@ -6,7 +6,7 @@ namespace ServiceLayer.Interface
     {
         List<CategoryDto> GetAllCategories();
         CategoryDto? GetCategoryById(Guid id);
-        Guid CreateCategory(CreateCategoryDto dto);
+        Task<Guid> CreateCategory(CreateCategoryDto dto);
         bool UpdateCategory(Guid id, UpdateCategoryDto dto);
         bool DeleteCategory(Guid id);
         List<CategoryHierarchyDto> GetCategoryHierarchy();
